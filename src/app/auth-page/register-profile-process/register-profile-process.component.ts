@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnChanges,
@@ -12,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
-import {INDONESIAN_PROVINCES, TURKISH_PROVINCES, EDUCATION_LEVEL, FACULTIES, JALUR} from 'src/app/shared/statics/static';
+import {INDONESIAN_PROVINCES, TURKISH_PROVINCES, EDUCATION_LEVEL, FACULTIES, JALUR, INSTITUTIONS} from 'src/app/shared/statics/static';
 declare const M: any;
 
 @Component({
@@ -22,6 +23,14 @@ declare const M: any;
 })
 export class RegisterProfileProcessComponent implements OnInit {
   // @ViewChild('datePicker', {static: true}) elems: ElementRef;
+  private autoInstitution: ElementRef;
+
+  @ViewChild('autoInstitution', {static: false, read: ElementRef}) set content(content: ElementRef) {
+     if(content) { // initially setter gets called with undefined
+         this.autoInstitution = content;
+     }
+  }
+
 
   stepListener$ = new BehaviorSubject<number>(1);
   basicInfoForm: FormGroup;
@@ -29,6 +38,7 @@ export class RegisterProfileProcessComponent implements OnInit {
   aboutMeForm: FormGroup;
   emergencyContactForm: FormGroup;
   currentStep: number = 1;
+  otherInput = false;
   EDUCATION_LEVEL = EDUCATION_LEVEL;
   INDONESIAN_PROVINCES = INDONESIAN_PROVINCES;
   TURKISH_PROVINCES = TURKISH_PROVINCES;
@@ -58,7 +68,8 @@ export class RegisterProfileProcessComponent implements OnInit {
     private profileService: ProfileService,
     private router: Router,
     private authService: AuthService,
-    private utilService: UtilityService
+    private utilService: UtilityService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -106,6 +117,19 @@ export class RegisterProfileProcessComponent implements OnInit {
       turkishProvince: [null, Validators.required],
       jalur: ['mandiri'],
     });
+    this.initInstitutionAutoComplete();
+  }
+
+  initInstitutionAutoComplete() {
+    let institutionList = {};
+    for (const insName of INSTITUTIONS) {
+      institutionList[insName] = null;
+    }
+    this.changeDetectorRef.detectChanges();
+    const institutionRef = this.autoInstitution.nativeElement;
+    const instance = M.Autocomplete.init(institutionRef, {data: institutionList, onAutocomplete: (option) => {
+      this.educationForm.get('institution').patchValue(option);
+    }});
   }
 
   initAboutMeForm() {

@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -7,16 +7,18 @@ import { ProfileService } from 'src/app/shared/services/profile.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EventObject, EventService } from 'src/app/shared/services/event.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-add-event-dialog',
   templateUrl: './add-event-dialog.component.html',
   styleUrls: ['./add-event-dialog.component.scss'],
 })
-export class AddEventDialogComponent implements OnInit {
+export class AddEventDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   eventForm: FormGroup;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   isLoading: boolean;
+  private subs = new SubSink();
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +37,15 @@ export class AddEventDialogComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.subs.sink = this.eventForm.get('fromTime').valueChanges.subscribe(resp => {
+      if(this.eventForm.get('fromTime').value) {
+        this.eventForm.get('toTime').enable();
+        this.eventForm.updateValueAndValidity();
+      }
+    })
+  }
+
   initEventForm() {
     this.eventForm = this.fb.group({
       eventTitle: ['', Validators.required],
@@ -43,11 +54,20 @@ export class AddEventDialogComponent implements OnInit {
       authorName: [''],
       eventLocation: ['', Validators.required],
       date: ['', Validators.required],
-      fromTime: ['', Validators.required],
-      toTime: ['', Validators.required],
+      fromTime: [null, Validators.required],
+      toTime: [{value: null, disabled: true}, [Validators.required, this.timeValidator]],
       tags: [['PPI']],
     });
   }
+
+  timeValidator (control: AbstractControl):{[key: string]: boolean} | null {
+    if( control.value !== null && control.parent && (<FormGroup>control.parent).get('fromTime').value && control.value < (<FormGroup>control.parent).get('fromTime').value) {
+      return {'timeValidator': true}
+    }
+    return null;
+  };
+
+
 
   patchForm() {
     this.eventForm.patchValue(this.data);
@@ -109,5 +129,9 @@ export class AddEventDialogComponent implements OnInit {
 
   createEvent(payload: EventObject) {
     return this.eventService.createEvent(payload).toPromise();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

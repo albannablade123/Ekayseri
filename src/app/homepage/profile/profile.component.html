@@ -1,5 +1,5 @@
 <Section>
-    <p class="header">My Profile</p>
+    <p class="header">Profil</p>
     <app-spinner *ngIf="!(userProfile | async)"></app-spinner>
     <div class="container" *ngIf="(userProfile | async) as user">
         <div class='side'>
@@ -109,9 +109,7 @@
                                     <mat-form-field appearance="legacy" class="select-input">
                                         <mat-select formControlName="turkishProvince">
                                             <mat-option>None</mat-option>
-                                            <mat-option value="kayseri">Kayseri</mat-option>
-                                            <mat-option value="sivas">Kayseri 2</mat-option>
-                                            <mat-option value="Gaziantep">Kayseri 3</mat-option>
+                                            <mat-option *ngFor="let province of TURKISH_PROVINCES" [value]="province">{{province}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <label class="active">Provinsi (Turki)</label>
@@ -120,10 +118,7 @@
                                     <mat-form-field appearance="legacy" class="select-input">
                                         <mat-select formControlName="educationLevel">
                                             <mat-option>None</mat-option>
-                                            <mat-option value="high_school">High School</mat-option>
-                                            <mat-option value="undergraduate">Undergraduate</mat-option>
-                                            <mat-option value="master">Master</mat-option>
-                                            <mat-option value="phd">PhD</mat-option>
+                                            <mat-option *ngFor="let level of EDUCATION_LEVEL" [value]="level">{{level}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <label class="active">Level Pendidikan</label>

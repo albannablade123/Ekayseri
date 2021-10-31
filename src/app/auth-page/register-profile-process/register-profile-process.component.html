@@ -80,19 +80,27 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <input type="text" formControlName="institution" class="validate" name="first_name" required>
+                    <input type="text" #autoInstitution id="autocomplete-input" class="autocomplete validate" formControlName="institution" name="institution" required>
                     <label class="active">Nama Institusi Pendidikan</label>
                     <span class="helper-text" data-error="Field ini wajib di isi"></span>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <mat-form-field appearance="legacy" class="select-input">
-                        <mat-select formControlName="faculty">
-                            <mat-option>None</mat-option>
-                            <mat-option *ngFor="let faculty of FACULTIES" [value]="faculty">{{faculty}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <div [ngSwitch]="otherInput">
+                        <ng-container *ngSwitchCase="false">
+                            <mat-form-field  appearance="legacy" class="select-input">
+                                <mat-select formControlName="faculty">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let faculty of FACULTIES" [value]="faculty">{{faculty}}</mat-option>
+                                    <mat-option value="" (click)="otherInput = true;">Lainnya</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="true">
+                            <input type="text" placeholder="Tulis Nama Fakultas" formControlName="faculty" name="faculty" required>
+                        </ng-container>
+                    </div>
                     <label class="active">Fakultas</label>
                     <span class="helper-text" data-error="Field ini wajib di isi"></span>
                 </div>

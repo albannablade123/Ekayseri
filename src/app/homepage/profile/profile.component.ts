@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ProfileService } from 'src/app/shared/services/profile.service';
+import {INDONESIAN_PROVINCES, TURKISH_PROVINCES, EDUCATION_LEVEL, FACULTIES, JALUR, INSTITUTIONS} from 'src/app/shared/statics/static';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,9 @@ export class ProfileComponent implements OnInit {
     education: false,
   }
   currentUserName: any;
+  TURKISH_PROVINCES = TURKISH_PROVINCES;
+  EDUCATION_LEVEL = EDUCATION_LEVEL;
+  FACULTIES = FACULTIES;
 
   constructor(
     private profileService: ProfileService,

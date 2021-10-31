@@ -1,6 +1,7 @@
 <section>
     <p class="header">Panel Admin</p>
-    <div class="main-container">
+    <app-spinner *ngIf="isLoading"></app-spinner>
+    <div *ngIf="!isLoading" class="main-container">
         <div class="menu-section">
             <div class="card" [routerLink]="['./events']" routerLinkActive="active-card">
                 <div>
@@ -19,6 +20,12 @@
                     <mat-icon>article</mat-icon>
                 </div>
                 <p>News</p>
+            </div>
+            <div class="card" [routerLink]="['./roles']" routerLinkActive="active-card">
+                <div>
+                    <mat-icon>groups</mat-icon>
+                </div>
+                <p>Roles</p>
             </div>
         </div>
         <div class="content-section">

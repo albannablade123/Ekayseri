@@ -10,6 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AdminAnnouncementComponent } from './admin-announcement/admin-announcement.component';
+import { AdminRolesComponent } from './admin-roles/admin-roles.component';
+import { AssignRoleDialogComponent } from './admin-roles/assign-role-dialog/assign-role-dialog.component';
 
 
 
@@ -18,7 +20,9 @@ import { AdminAnnouncementComponent } from './admin-announcement/admin-announcem
     AdminPanelComponent,
     AdminDebtComponent,
     AdminEventComponent,
-    AdminAnnouncementComponent
+    AdminAnnouncementComponent,
+    AdminRolesComponent,
+    AssignRoleDialogComponent
   ],
   imports: [
     CommonModule,

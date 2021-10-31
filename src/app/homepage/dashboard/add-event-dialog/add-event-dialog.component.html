@@ -20,14 +20,15 @@
 
             <div class="row">
                 <div class="input-field col s6">
-                    <input type="time" formControlName="fromTime">
+                    <input type="time" class="validate" required formControlName="fromTime">
                     <label class="active">Jam Mulai</label>
                     <span class="helper-text" data-error="Field ini wajib di isi"></span>
                 </div>
                 <div class="input-field col s6">
-                    <input type="time" formControlName="toTime" >
+                    <input class="validate" type="time" formControlName="toTime" required>
                     <label class="active">Jam Selesai</label>
-                    <span class="helper-text" data-error="Field ini wajib di isi"></span>
+                    <span *ngIf= "!eventForm.get('toTime').errors?.timeValidator" class="helper-text" data-error="Field ini wajib di isi"></span>
+                    <p class="field-warning-text" *ngIf= "eventForm.get('toTime').errors?.timeValidator">*Jam selesai harus lebih di atas jam mulai</p>
                 </div>
             </div>
     
@@ -41,7 +42,7 @@
     
             <div class="row">
                 <div class="input-field col s12">
-                    <textarea formControlName="eventDescription" id="textarea1" class="materialize-textarea"></textarea>
+                    <textarea class="validate" required formControlName="eventDescription" id="textarea1" class="materialize-textarea"></textarea>
                     <label class="active" for="textarea1">Deskripsi Acara</label>
                   </div>
             </div>

@@ -1,13 +1,12 @@
 .mat-dialog-content {
-    #datePickerField {
-        margin: 0;
-        padding: 0;
-    }
-
     .field-warning-text {
         font-size: 12px;
         color: red;
         margin: 0;
+    }
+
+    .mat-form-field {
+        width: 100%;
     }
 }
 

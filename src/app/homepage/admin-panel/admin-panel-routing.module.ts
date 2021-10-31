@@ -4,6 +4,7 @@ import { AdminAnnouncementComponent } from './admin-announcement/admin-announcem
 import { AdminDebtComponent } from './admin-debt/admin-debt.component';
 import { AdminEventComponent } from './admin-event/admin-event.component';
 import { AdminPanelComponent } from './admin-panel.component';
+import { AdminRolesComponent } from './admin-roles/admin-roles.component';
 
 const routes: Routes = [
   { 
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: 'announcements',
         component: AdminAnnouncementComponent,
+      },
+      {
+        path: 'roles',
+        component: AdminRolesComponent,
       }
     ]
   }
